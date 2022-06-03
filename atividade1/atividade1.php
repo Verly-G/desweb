@@ -60,7 +60,7 @@
 
     // Outro jeito de converter uma determinada variável.
 
-    echo "Outro jeito de converter o tip da variável. <br/><br/>";
+    echo "Outro jeito de converter o tip da variável.<br/>";
 
     $idad = (bool) $idade;
 
@@ -85,6 +85,8 @@
     $idad = (binary) $idade;
 
     echo "{$idad} <br/><br/>";
+
+    
 
 
     // Como criar uma função:
@@ -148,7 +150,5 @@
     }else echo "A variável não tem nada escrito.  <br/><br/>";
 
 ?>
-
-
 </body>
 </html>
