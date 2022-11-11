@@ -1,0 +1,36 @@
+CREATE DATABASE IF NOT EXISTS cine2 CHARSET=utf8 COLLATE=utf8_unicode_ci;
+USE cine2;
+-- genero
+CREATE TABLE genero(id INT AUTO_INCREMENT, descricao VARCHAR(20) NOT NULL, PRIMARY KEY(id), UNIQUE INDEX idx_genero_descricao(descricao)) ENGINE=INNODB;
+-- filme (id,titulo, imdb, genero)
+CREATE TABLE filme(id INT AUTO_INCREMENT PRIMARY KEY, titulo VARCHAR(50) NOT NULL, imdb DECIMAL(9,1) NOT NULL, genero_id INT, UNIQUE INDEX idx_filme_titulo_id(titulo,genero_id), CONSTRAINT fk_filme__genero_id FOREIGN KEY(genero_id) REFERENCES genero(id) ON DELETE RESTRICT ON UPDATE CASCADE) ENGINE= INNODB;
+
+INSERT INTO genero(id, descricao)VALUES(1, 'AÇÂO'),(2,'ROMANCE'), (3, 'COMÉDIA'), (4, 'FICÇÂO CIENTIFICA'), (5, 'DRAMA'), (6, 'ANIMAÇÂO'), (7, 'TERROR'), (8, 'SUSPENSE'), (9, 'COMÉDIA ROMÂNTICA'), (10, 'DOCUMENTÁRIO');
+
+INSERT INTO filme(id,titulo,imdb,genero_id) VALUES(1, 'CORINGA',8.4,5),
+(2, 'ADÂO NEGRO',4.2,1),
+(3, 'INTERESTELAR',9.2,4),
+(4, 'BOB ESPONJA',8.0,6),
+(5, 'EL CAMINHO',8.0,5),
+(6, 'TELEFONE PRETO',8.3,7),
+(7, 'UM LUGAR CHAMADO NOTHING HILL',9.3,9),
+(8, 'VOVOZONA',2.0,3),
+(9, 'DIÁRIO DE UMA PAIXÃO',9.4,2),
+(10, 'NIGTH STALKER',4.2,10);
+
+UPDATE genero SET id=40 WHERE id=4;
+SELECT * FROM genero;
+SELECT * FROM filme;
+
+SELECT f.id, f.titulo,f.imdb,g.descricao as genero_desc
+FROM filme f JOIN genero g ON(f.genero_id = g.id)
+ORDER BY f.titulo LIMIT 5,5;
+
+SELECT f.id, f.titulo,f.imdb,g.descricao as genero_desc
+FROM filme f RIGHT OUTER JOIN genero g ON(f.genero_id = g.id)
+
+SELECT g.descricao, COUNT(g.id) as total
+FROM filme f JOIN genero g ON(f.genero_id = g.id)
+GROUP BY g.descricao
+HAVING total>1
+ORDER BY total DESC;
