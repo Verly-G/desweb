@@ -1,0 +1,8 @@
+create database empresa;
+
+create TABLE produto(
+    id int not null AUTO_INCREMENT PRIMARY KEY,
+    descricao varchar(50),
+    preco_de_custo decimal(9.2),
+    estoque int    
+);
