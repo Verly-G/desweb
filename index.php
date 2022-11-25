@@ -8,7 +8,7 @@
 </head>
 <body>
     <?php
-        echo "Matéria: Desenvolvimento Web |";
+        echo "Matéria: Desenvolvimento Web |";z
     ?>
 </body>
 </html>
