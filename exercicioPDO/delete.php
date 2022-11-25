@@ -8,7 +8,7 @@
         $retorno = $conexao->exec($sql);
         echo "Produto deletado com sucesso";
     }catch(PDOException $e){
-        echo "Não conseguiU deletar".e->getMessage()."<br>";
+        echo "Não conseguiu deletar".$e->getMessage()."<br>";
     }
 
 ?>
