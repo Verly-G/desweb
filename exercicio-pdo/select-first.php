@@ -2,7 +2,7 @@
 
     require_once 'conexao.php';
 
-    $sql = 'SELECT filme.id, filme.titulo, filme.imdb, filme.genero_id, genero.descricao FROM filme
+    $sql = 'SELECT filme.id, filme.titulo, filme.data_lanc, filme.imdb, filme.genero_id, genero.descricao FROM filme
             INNER JOIN genero ON(filme.genero_id = genero.id);';
     
     try{
@@ -10,6 +10,7 @@
         $filme = $retorno->fetchAll();
         echo "Id: {$filme[0]['id']} <br>
               Título: {$filme[0]['titulo']} <br> 
+              Data de lançamento: {$filme[0]['data_lanc']} <br>
               Imdb: {$filme[0]['imdb']} <br> 
               Gênero: Id: {$filme[0]['genero_id']} Nome: {$filme[0]['descricao']}<br>";
     }catch(PDOException $e){

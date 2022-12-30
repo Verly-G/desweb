@@ -1,7 +1,7 @@
 <?php
 
     $dns = "mysql:host=localhost;
-            dbname=cine2;
+            dbname=cinema;
             charset=utf8";
 
     $user = "root";

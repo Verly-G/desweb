@@ -2,7 +2,7 @@
 
     require_once 'conexao.php';
 
-    $sql = 'SELECT f.id, f.titulo, f.imdb, f.genero_id, g.descricao FROM filme f
+    $sql = 'SELECT f.id, f.titulo, f.data_lanc, f.imdb, f.genero_id, g.descricao FROM filme f
             INNER JOIN genero g ON(g.id = f.genero_id);';
 
     try{
@@ -27,6 +27,7 @@
         for($i = 0; $i < count($filme); $i++){
             echo "Id: {$filme[$i]->id} <br>
             Título: {$filme[$i]->titulo}<br>
+            Data de lançamento: {$filme[$i]->data_lanc}
             Imdb: {$filme[$i]->imdb}<br>
             Gênero Id: {$filme[$i]->genero_id} <br>
             Gênero Descrição: {$filme[$i]->descricao}";
