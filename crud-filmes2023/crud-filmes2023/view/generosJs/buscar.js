@@ -1,11 +1,11 @@
 //Ao carregar a página
-window.onload = function(){
-    //Pegue o parâmetro id contido na query string da url
-    let qs = window.location.search.replace('?','');
-    let parametrosBuscar = qs.split('=');
-    let id = parametrosBuscar[1];
-    generoBuscarFetch(id);   
-}
+// window.onload = function(){
+//     //Pegue o parâmetro id contido na query string da url
+//     let qs = window.location.search.replace('?','');
+//     let parametrosBuscar = qs.split('=');
+//     let id = parametrosBuscar[1];
+//     generoBuscarFetch(id);   
+// }
 //Busca um gênero com base no id recuperado na queryString
 function  generoBuscarFetch(id){  
     //fetch enviando o id do genero a ser recuperado
@@ -26,7 +26,7 @@ function  generoBuscarFetch(id){
                     document.querySelector('#msgSucesso').textContent = "";
                 },1500);
             }else
-                document.querySelector('#msgSucesso').textContent = respostaJSON.msgErro;
+                cbErroBuscarGenero(respostaJSON.msgErro);
         })
         .catch(function(erro){
             document.querySelector('#msgSucesso').textContent = erro;
@@ -34,11 +34,19 @@ function  generoBuscarFetch(id){
 }
 //Função de callback
 function cbSucessoBuscarGenero(respostaJSON){
+    $("#modal-formulario-alterar").modal({backdrop: 'static'});
+    $("#modal-formulario-alterar").modal('show');
+    let formAlterar = document.querySelector('#form-alterar');
     let genero = respostaJSON.dados;
     //Preencha os inputs com os dados trazidos
-    document.querySelector('#id').value = genero.id;
-    document.querySelector('#descricao').value = genero.descricao;
+    formAlterar.querySelector('#id').value = genero.id;
+    formAlterar.querySelector('#descricao').value = genero.descricao;
 }
-
-
-
+function cbErroBuscarGenero(erro){
+    document.querySelector('#msgErro').textContent = erro;
+    setTimeout(function(){
+        //Recarrega depois de 1,5 e uma mensagem é exibida
+        limparSpans();
+        generoListarFetch();
+    }, 1500);
+}

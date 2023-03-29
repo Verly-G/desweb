@@ -2,23 +2,25 @@
 const $btnAlterar = document.querySelector('#alterar');
 $btnAlterar.addEventListener('click', function(event){
     event.preventDefault();
+    generoAlterarFetch();
+    $("#modal-formulario-alterar").modal('hide');
+});
+let generoAlterarFetch = function(){
+    let formAlterar = document.querySelector('#form-alterar');
     let genero = {
-        "id": document.querySelector('#id').value,
-        "descricao": document.querySelector('#descricao').value
+        "id": formAlterar.querySelector('#id').value,
+        "descricao": formAlterar.querySelector('#descricao').value
     };
     let configMetodo = {
-        method: "PUT",
-        body: JSON.stringify(genero),
-        headers: {
-            "Content-Type":"application/json;charset=UTF-8"
-        }
+        method: "PUT", body: JSON.stringify(genero), headers: {"Content-Type":"application/json;charset=UTF-8"}
     };
-    //fetch enviando o genero a ser alterado
+
+    //fetch enviado o genero a ser alterado
     fetch("../controller/generoAlterar.php", configMetodo)
         .then(function(resposta){
             if(!resposta.ok===true){
                 let msg = resposta.status + " - " + resposta.statusText;
-                throw new Error(msg)
+                throw new Error(msg);
             }
             else
                 return resposta.json();
@@ -27,12 +29,12 @@ $btnAlterar.addEventListener('click', function(event){
             if(respostaJSON.erro===false)
                 cbSucessoAlterarGenero(respostaJSON);
             else
-                document.querySelector('#msgErro').textContent = respostaJSON.msgErro;
+                cbErroAlterarGenero(respostaJSON.msgErro);
         })
         .catch(function(erro){
             document.querySelector('#msgSucesso').textContent = erro;
-        });
-});
+        })
+}
 
 //Recupera o botão cancelar
 const $btnCancelar = document.querySelector('#cancelar');
@@ -45,6 +47,14 @@ $btnCancelar.addEventListener('click',function(){
 function cbSucessoAlterarGenero(respostaJSON){
     document.querySelector('#msgSucesso').textContent = respostaJSON.msgSucesso;
     setTimeout(function(){
-       window.location.href = "../view/generos.html";
+        //Depois de 1,5 segundos, uma mensagem aparece e recarrega a lista
+        limparSpans();
+        generoListarFecth();
     },1500);
+}
+function cbErroAlterarGenero(erro){
+    document.querySelector('#msgErro').textContent = erro;
+    setTimeout(function(){
+        limparSpans();
+    }, 1500);
 }

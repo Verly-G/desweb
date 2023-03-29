@@ -20,11 +20,15 @@
 <body>
     <nav>
         <ul class="menu">
-            <li><a href="index.html">Home</a></li>
+            <li>
+                <button id="btn-home-jquery" class="btn btn-primary btn-sm">
+                    <i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home
+                </button>
+            </li>
             <li>
                 <button id="btn-novo-jquery" class="btn btn-primary btn-sm ">
                     <i class="fa fa-user-plus" aria-hidden="true">
-                    &nbsp; Inserir novo gênero</i>
+                    &nbsp;Inserir novo gênero</i>
                 </button>
             </li>
         </ul>
@@ -109,6 +113,9 @@
         $("#btn-fechar-jquery-alterar").click(function(){
             $("#modal-formulario-alterar").modal({backdrop: 'static'});
             $("#modal-formulario-alterar").modal('hide');
+        });
+        $("#btn-home-jquery").click(function(){
+            window.location.href = "index.html";
         });
     </script>
     
