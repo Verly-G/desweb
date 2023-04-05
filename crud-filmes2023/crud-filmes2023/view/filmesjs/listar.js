@@ -1,21 +1,40 @@
-fetch("../controller/filmeListar.php")
-    .then(function(resposta){
-        if(!resposta.ok===true){
-            let msg = resposta.status + " - " + resposta.statusText;
-            document.querySelector('#msgErro').textContent = msg;
-        }else
-            return resposta.json();        
-    })
-    .then(function(respostaJSON){
-        if(respostaJSON.erro===false)
-            cbSucessoListarFilme(respostaJSON);
-        else
-            document.querySelector('#msgErro').textContent = respostaJSON.msgErro;
-    })
-    .catch(function(erro){
-        document.querySelector('#msgErro').textContent = erro;
-    });
+// Ao carregar a página 
+window.onload = () =>{
+    // Traz os filmes por meio de uma  requisição ajaj
+    filmeListarFetch();
+    // Já carrega os gêneros no modal através de outra requisição  AJAJ
+    //  Vai ser útil quando formos utilizar a opção de inserir um novo filme
+    // filmeListarGeneroInserirFetch();
+}
 
+// Uma função que faz  fetch e usa  o método GET por default. Por isso não precisamos explicitar
+let filmeListarFetch = function(){
+    document.querySelector('tbody').innerHTML="";   
+    fetch("../controller/filmeListar.php")
+        .then(function(resposta){
+            if(!resposta.ok===true){
+                let msg = resposta.status + " - " + resposta.statusText;
+                throw new Error(msg);
+            }else
+                return resposta.json();        
+        })
+        .then(function(respostaJSON){
+            if(respostaJSON.erro===false)
+                cbSucessoListarFilme(respostaJSON);
+            else
+                cbErroListarFilme(respostaJSON.msgErro);
+        })
+        .catch(function(erro){
+            document.querySelector('#msgErro').textContent = erro;
+        });
+}
+
+function cbSucessoListarFilme(respostaJSON){
+    montarTabela(respostaJSON.dados)
+}
+function cbErroListarFilme(erro){
+    document.querySelector('#msgErro').textContent = erro;
+}
 function montarTabela(dados){
     for (const i in dados) {
         let filme = dados[i];
@@ -25,32 +44,13 @@ function montarTabela(dados){
         criarTDePendurar($tr, filme.titulo , false);
         criarTDePendurar($tr, filme.avaliacao , false);
         criarTDePendurar($tr, filme.genero_descricao , false);
-        let links = "<a href=filmeFormBuscar.html?id="+filme.id+">[Editar]</a>";
-        links+= "<a href=#  >[Excluir]</a>" 
+        let links = "<a href=# '>[Editar]</a>";
+        links+= "<a href=# '>[Excluir]</a>" 
         criarTDePendurar($tr, links , true);
         //Pendura a linha criada a cada iteração no tbody da tabela
         document.querySelector('tbody').appendChild($tr);
     }//Fim do for in
 }//Fim da função
-const $corpoTabela = document.querySelector('tbody');
-$corpoTabela.addEventListener('click',function(event){
-    if(event.target.tagName==='A'){
-        let link = event.target;
-        let filmeAExcluir = obterValorDaColunaId(link);
-        if(filmeAExcluir>0)
-            excluirFilme(filmeAExcluir); //Função contida em excluir.js
-    }  
-});
-
-function obterValorDaColunaId(link){
-    if(link.textContent === "[Excluir]"){
-        let coluna = link.parentNode;
-        let linha = coluna.parentNode;
-        let idText = linha.firstChild;
-        return parseInt(idText.textContent);
-    }
-    return null;
-}
 
 function criarTDePendurar(noPai, informacao, ehHtml){
     let td = document.createElement('td');
@@ -61,13 +61,26 @@ function criarTDePendurar(noPai, informacao, ehHtml){
     noPai.appendChild(td);
 }
 
-//Função de callback
-function cbSucessoListarFilme(respostaJSON){
-    montarTabela(respostaJSON.dados);
+const $corpoTabela = document.querySelector('tbody');
+$corpoTabela.addEventListener('click',function(event){
+    if(event.target.tagName==='A'){
+        let link = event.target;
+        let filmeId = obterValorDaColunaId(link);
+        if(filmeId>0 && link.textContent === "[Excluir]")
+            filmeExcluirFetch(filmeId);
+        else if(filmeId>0 && link.textContent === "[Editar]")
+            filmeBuscarFetch(filmeId);
+    }  
+});
+
+function obterValorDaColunaId(link){
+    let coluna = link.parentNode;
+    let linha = coluna.parentNode;
+    let idText = linha.firstChild;
+    return parseInt(idText.textContent);
 }
 
-
-
-
-
-       
+function limparSpans(){
+    document.querySelector('#msgErro').textContent = "";
+    document.querySelector('#msgSucesso').textContent = "";     
+}

@@ -1,4 +1,4 @@
-function excluirFilme(id){
+function filmeExcluirFetch(id){
     if(confirm('Confirma a exclusão do filme de id '+id+'?')){ 
         let filme = {"id": id};
         let configMetodo = {
@@ -13,7 +13,7 @@ function excluirFilme(id){
             .then(function(resposta){
                 if(!resposta.ok===true){
                     let msg = resposta.status + " - " + resposta.statusText;
-                    document.querySelector('#msgErro').textContent = msg;
+                    throw new Error(msg);
                 }else
                     return resposta.json();        
             })
@@ -21,7 +21,7 @@ function excluirFilme(id){
                 if(respostaJSON.erro===false)
                     cbSucessoExcluirFilme(respostaJSON);
                 else
-                    document.querySelector('#msgErro').textContent = respostaJSON.msgErro;
+                    cbErroExcluirFilme(respostaJSON.msgErro);
             })
             .catch(function(erro){
                 document.querySelector('#msgErro').textContent = erro;
@@ -33,6 +33,14 @@ function cbSucessoExcluirFilme(respostaJSON){
     document.querySelector('#msgSucesso').textContent = respostaJSON.msgSucesso;
     //Em seguida, redirecione para a página principal
     setTimeout(function(){
-        window.location.href = "../view/filmes.html";
+        limparSpans();
+        filmeListarFetch();
     },3500); 
+}
+
+function cbErroExcluirFilme(erro){
+    document.querySelector('#msgErro').textContent = erro;
+    setTimeout(function(){
+        limparSpans();
+    }, 1500);   
 }
