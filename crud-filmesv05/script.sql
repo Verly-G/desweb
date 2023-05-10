@@ -95,7 +95,7 @@ ALTER TABLE `filmes_assistidos`
 -- Índices para tabela `generos`
 --
 ALTER TABLE `generos`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`id`),nome
   ADD UNIQUE KEY `idx__generos_descricao` (`descricao`);
 
 --
@@ -129,3 +129,11 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+CREATE TABLE `usuario` (
+  `id` int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  `nome` varchar(30) NOT NULL,
+  `login` varchar(10),
+  `senha` varchar(220),
+  UNIQUE INDEX IDX_LOGIN('login'),
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
