@@ -1,15 +1,4 @@
 <?php
-/*     class Conta{
-        //características(atributos)
-        public int $numero;
-        public string $cpf;
-        public string $titular;
-        public float $saldo;
-
-        public function saca(float $valor):void{
-            $this->saldo -= $valor;
-        }  
-    } */
     class Conta{
 
         private int $numero=0;
@@ -21,10 +10,8 @@
             return $this->numero;
         }
         public function atribuiNumero(int $numero):void{
-            if($numero <=0){
-                echo "Número Inválido";
-                return;
-            }
+            if($numero<=0)
+                die("Número inválido. A aplicação será encerrada.");
             $this->numero = $numero;
         }
 
@@ -32,10 +19,8 @@
             return $this->titular;
         }
         public function atribuiTitular(string $titular):void{
-            if(strlen($titular)<=6){
-                echo "Nome pequeno, por favor, coloque seu nome completo.";
-                return;
-            }
+            if(strlen($titular)<5)
+                die("O titular precisa ter ao menos 5 caracteres. A aplicação será encerrada.");
             $this->titular = $titular;
         }
 
@@ -43,13 +28,15 @@
             return $this->cpf;
         }
         public function atribuiCpf(string $cpf):void{
-            if(strlen($cpf)!=14){
-                echo "Cpf inválido";
-                return;
-            }
+            if($this->validaCpf($cpf)==false)
+                die("CPF inválido. A aplicação será encerrada.");
             $this->cpf = $cpf;
         }
-
+        private function validaCpf(string $cpf):bool{
+            if(strlen($cpf)==14 && strpos($cpf,'.')===3 && strpos($cpf,'.',4)===7 && strpos($cpf,'-')===11)
+                return true;
+            return false;
+        }
         public function obtemSaldo():float{
             return $this->saldo;
         }
@@ -68,7 +55,7 @@
             }
             $this->saldo -= $valorDoSaque; 
         }
-        public function deposito(int $valorDoDeposito):void{
+        public function deposita(int $valorDoDeposito):void{
             if($valorDoDeposito<=0){
                 echo "O valor do depósito deve ser maior que zero.";
                 return;
@@ -77,7 +64,7 @@
         }
         public function tranferePara(Conta $destinatario, int $valorDaTranferencia):void{
             $this->saca($valorDaTranferencia);
-            $destinatario->deposito($valorDaTranferencia);
+            $destinatario->deposita($valorDaTranferencia);
         }
     }
 ?>
